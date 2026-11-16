@@ -2,9 +2,9 @@
 
 Team members + student number <br>
 Annemiek Veld 5658586 <br>
-Jessica 5678285<br>
-Aynur <br>
-Caleb 5680891
+Jessica Fernandes Camacho 5678285<br>
+Aynur Tozluyurt 5746507<br>
+Caleb Gaïtou 5680891
 
 
 
