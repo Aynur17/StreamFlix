@@ -350,3 +350,75 @@ Make sure the terminal is inside the `demo` directory before running `.\mvnw.cmd
 **Academic year:** 2026–2027
 
 Developed as a collaborative student project.
+
+## 14.  Backend Architecture
+
+The StreamFlix backend follows a layered architecture using Spring Boot and Spring JDBC. This separates HTTP request handling, business logic and database operations.
+
+### Package Structure
+
+```text
+com.example.demo/
+├── config/          # Application configuration
+├── controller/      # REST API endpoints
+├── dto/             # Request and response objects
+├── exception/       # Exception handling
+├── model/           # Domain models
+├── repository/      # Database access using JDBC
+├── security/        # Authentication and authorisation
+├── service/         # Business logic and validation
+└── DemoApplication.java
+```
+
+### Layer Responsibilities
+
+| Layer | Responsibility |
+|---|---|
+| Controller | Handles incoming HTTP requests and returns responses |
+| Service | Processes business logic and validates input |
+| Repository | Executes SQL queries through Spring JDBC |
+| Model | Represents application data |
+| DTO | Defines API request and response structures |
+
+### Movie API
+
+The Movie API is the first example of the layered backend architecture.
+
+**Endpoint:**
+
+`GET /api/movies/{id}`
+
+**Request example:**
+
+```http
+GET http://localhost:8081/api/movies/1
+```
+
+**Example response (planned):**
+
+```json
+{
+  "id": 1,
+  "title": "Inception",
+  "releaseYear": 2010,
+  "minimumAge": 12
+}
+```
+
+**Implementation:**
+
+- `Movie.java` — represents a movie.
+- `MovieRepository.java` — retrieves movies from PostgreSQL using `JdbcTemplate` and `RowMapper`.
+- `MovieService.java` — handles business logic and validates movie IDs.
+- `MovieController.java` — exposes the REST endpoint.
+
+**Current limitations:** The Movie API depends on the database schema being implemented and verified. HTTP error handling for invalid or nonexistent movie IDs is not yet complete.
+
+### Planned Backend Improvements
+
+- Global exception handling with appropriate HTTP status codes.
+- Authentication and role-based authorisation.
+- Input validation.
+- OpenAPI/Swagger documentation.
+- Unit and integration tests.
+- Integration with the final PostgreSQL database schema.
