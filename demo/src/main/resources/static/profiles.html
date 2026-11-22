@@ -19,29 +19,54 @@
         <h2>Who is watching?</h2>
 
         <section class="profiles" id="profiles-container">
-            <!-- display profiles here. examples: -->
-            <div class="profile" onclick="selectProfile('Profile 1')">
-                <div class="profile-image">
-                    <img src="images/profile1.png" alt="Profile 1">
-                </div>
-                <h3>Profile 1</h3>
-            </div>
-
-            <!-- example profile 2 -->
-            <div class="profile" onclick="selectProfile('Profile 2')">
-                <div class="profile-image">
-                    <img src="images/profile2.png" alt="Profile 2">
-                </div>
-                <h3>Profile 2</h3>
-            </div>
-
-            <!-- Add profile option -->
-            <div class="profile" onclick="addProfile()">
-                <div class="add-profile">+</div>
-                <h3>Add Profile</h3>
-            </div>
         </section>
+
+            <div class="add-profile-form" id="add-profile-section" hidden>
+
+                <h2>Create a profile</h2>
+
+                <form id="profile-form">
+                    <label for="profile-name">Name</label>
+                    <input type="text" name="profile-name" id="profile-name" placeholder="Enter your profile name here" maxlength="30" required>
+
+                    <label for="age-category">Age category</label>
+                    <select name="age-category" id="age-category" required>
+                        <option value="" disabled selected>Select an age category</option>
+                        <option value="6">6+</option>
+                        <option value="9">9+</option>
+                        <option value="12">12+</option>
+                        <option value="16">16+</option>
+                        <option value="18">18+</option>
+                    </select>
+
+                    <p>Choose an avatar (optional)</p>
+
+                    <div class="avatar-options">
+                        <label>
+                            <input type="radio" name="avatar" value="profile1.png"> <!-- value=example -->
+                            <img src="images/profile1.png" alt="Avatar 1">
+                        </label>
+
+                        <label>
+                            <input type="radio" name="avatar" value="profile2.png">
+                            <img src="images/profile2.png" alt="Avatar 2">
+                        </label>
+
+                        <label>
+                            <input type="radio" name="avatar" value="profile3.png">
+                            <img src="images/profile3.png" alt="Avatar 3">
+                        </label>
+                    </div>
+
+                    <button type="submit">Create profile</button>
+                    <button type="reset">Reset</button>
+                    <button type="button" id="cancel">Cancel</button>
+                </form>
+
+            </div>
+
     </main>
 
     <script src="js/profiles.js"></script>
     </body>
+</html>

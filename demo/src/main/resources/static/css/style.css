@@ -213,15 +213,33 @@ button:hover {
     justify-content: center;
 }
 
-.profile-container h2 {
+.profile-container > h2 {
     font-size: 30px;
     margin-bottom: 40px;
     color: #FFF2F2;
 }
 
+.profiles {
+    display: flex;
+    justify-content: center;
+    align-items: center; /* or flex-start*/
+    gap: 40px;
+    /*flex-wrap: wrap;*/
+}
+
 .profile {
     text-align: center;
     cursor: pointer;
+    width: 150px;
+}
+
+.profile:hover {
+    background-color: #A9B5DF;
+    color: #2D336B;
+    text-decoration: none;
+    border-radius: 10px;
+    padding: 30px;
+    font-style: italic;
 }
 
 .profile-image {
@@ -234,7 +252,15 @@ button:hover {
 
 .profile h3 {
     color: #FFF2F2;
+    margin-bottom: 5px;
 }
+
+.profile p {
+    color: #A9B5DF;
+    font-size: 14px;
+}
+
+/* "add profile" card */
 
 .add-profile {
     width: 130px;
@@ -247,6 +273,12 @@ button:hover {
     font-size: 50px;
     color: #A9B5DF;
     margin-bottom: 12px;
+    cursor: pointer;
+}
+
+.add-profile:hover {
+    background-color: #A9B5DF;
+    color: #2D336B;
 }
 
 .profile-image img {
@@ -254,4 +286,90 @@ button:hover {
     height: 100%;
     object-fit: cover;
     border-radius: 10px;
+}
+
+.add-profile:hover .add-profile {
+    background-color: aliceblue;
+}
+
+/* Profile form design */
+
+.add-profile-form {
+    background-color: #252A59;
+    width: 100%;
+    max-width: 500px;
+    padding: 35px;
+    border-radius: 5px;
+    margin-top: 45px;
+}
+
+.add-profile-form[hidden] {
+    display: none;
+}
+
+.add-profile-form h2 {
+    color: #A9B5DF;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.add-profile-form label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 8px;
+}
+
+.add-profile-form input[type="text"],
+.add-profile-form select {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    background-color: #FFF2F2;
+    color: #2D336B;
+}
+
+.avatar-heading {
+    margin-top: 20px;
+}
+
+.avatar-options {
+    display: flex;
+    gap: 15px;
+    margin: 15px 0 25px;
+}
+
+.avatar-options label {
+    margin: 0;
+    cursor: pointer;
+}
+
+.avatar-options img {
+    width: 65px;
+    height: 65px;
+    object-fit: cover;
+    border-radius: 8px;
+    display: block;
+    border: 3px solid transparent;
+}
+
+.avatar-options input {
+    margin-bottom: 5px;
+    accent-color: #A9B5DF;
+}
+
+.avatar-options input:checked + img {
+    border-color: #A9B5DF;
+}
+
+.form-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.form-buttons button {
+    flex: 1;
+    min-width: 100px;
 }
