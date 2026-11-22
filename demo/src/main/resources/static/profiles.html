@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+
+    <title>Profiles - StreamFlix</title>
+
+</head>
+
+    <body>
+
+    <header>
+        <h1>StreamFlix</h1>
+    </header>
+
+    <main class="profile-container">
+        <h2>Who is watching?</h2>
+
+        <section class="profiles" id="profiles-container">
+            <!-- display profiles here. examples: -->
+            <div class="profile" onclick="selectProfile('Profile 1')">
+                <div class="profile-image">
+                    <img src="images/profile1.png" alt="Profile 1">
+                </div>
+                <h3>Profile 1</h3>
+            </div>
+
+            <!-- example profile 2 -->
+            <div class="profile" onclick="selectProfile('Profile 2')">
+                <div class="profile-image">
+                    <img src="images/profile2.png" alt="Profile 2">
+                </div>
+                <h3>Profile 2</h3>
+            </div>
+
+            <!-- Add profile option -->
+            <div class="profile" onclick="addProfile()">
+                <div class="add-profile">+</div>
+                <h3>Add Profile</h3>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/profiles.js"></script>
+    </body>
