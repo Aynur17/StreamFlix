@@ -29,7 +29,8 @@ Tests use temporary data whenever possible. Transactions and rollback operations
 tests/
 ├── README.md
 └── schema/
-    └── accounts_test.sql
+    ├── accounts_test.sql
+    └── age_categories_test.sql
 ```
 
 ### Directory responsibilities
@@ -54,8 +55,9 @@ The following conventions are used when creating database tests:
 - Each test case receives a unique identifier.
 - Test cases are separated and documented using SQL comments.
 - Both valid and invalid inputs are tested where applicable.
-- Assertions are used to verify expected results.
+- Conditional checks are used to verify expected results.
 - Expected constraint violations are handled explicitly.
+- Successful tests report their results using `RAISE NOTICE`.
 - Temporary test data is rolled back whenever possible.
 - Tests should be reproducible and should not depend on previously created test data.
 
@@ -64,6 +66,7 @@ The following conventions are used when creating database tests:
 | Prefix | Component |
 |---|---|
 | `ACC` | Accounts |
+| `AGE` | Age Categories |
 | `PRO` | Profiles |
 | `TIT` | Titles |
 | `GEN` | Genres |
@@ -96,7 +99,9 @@ Tests are executed against the PostgreSQL database running through Docker Compos
 5. Review the execution output.
 6. Verify that the expected success messages are present and that the script completes successfully.
 
-Tests use `RAISE NOTICE` to report successful test execution and `ASSERT` statements to verify expected conditions.
+Tests use `RAISE NOTICE` to report successful test execution and conditional checks to verify expected results.
+
+Expected database errors are handled explicitly within individual test blocks. If an unexpected result occurs, the test raises an exception indicating that the test failed.
 
 ---
 
@@ -104,7 +109,7 @@ Tests use `RAISE NOTICE` to report successful test execution and `ASSERT` statem
 
 ### Accounts table
 
-Test file: `schema/accounts_test.sql`
+**Test file:** `schema/accounts_test.sql`
 
 | Test ID | Description | Expected result | Status |
 |---|---|---|---|
@@ -121,22 +126,40 @@ Test file: `schema/accounts_test.sql`
 
 Date executed: 23 November 2026
 
-### Age Categories Table
+---
+
+### Age Categories table
 
 **Test file:** `schema/age_categories_test.sql`
 
-| Test ID | Description | Result |
-|---|---|---|
-| AGE-01 | Age category creation and ID generation | PASS |
-| AGE-02 | Multiple categories with distinct IDs | PASS |
-| AGE-03 | Reject duplicate category names | PASS |
-| AGE-04 | Reject NULL category name | PASS |
-| AGE-05 | Reject NULL minimum age | PASS |
-| AGE-06 | Reject negative minimum age | PASS |
-| AGE-07 | Accept minimum age of zero | PASS |
-| AGE-08 | Accept valid positive minimum age | PASS |
+The Age Categories table uses the Dutch Kijkwijzer age classification system. The database restricts category names and minimum ages to the supported categories and ensures that each category is paired with its corresponding minimum age.
+
+| Category | Minimum age |
+|---|---:|
+| AL | 0 |
+| 6 | 6 |
+| 9 | 9 |
+| 12 | 12 |
+| 14 | 14 |
+| 16 | 16 |
+| 18 | 18 |
+
+#### Test cases
+
+| Test ID | Description | Expected result | Status |
+|---|---|---|---|
+| AGE-01 | Valid Kijkwijzer categories | All seven valid categories accepted | PASS |
+| AGE-02 | Automatic ID generation | Category ID generated automatically | PASS |
+| AGE-03 | Duplicate category names | Duplicate category rejected | PASS |
+| AGE-04 | Invalid category name | Invalid category rejected | PASS |
+| AGE-05 | Invalid minimum age | Unsupported minimum age rejected | PASS |
+| AGE-06 | Category and minimum age mismatch | Incorrect category-age combination rejected | PASS |
+| AGE-07 | NULL category name | NULL category name rejected | PASS |
+| AGE-08 | NULL minimum age | NULL minimum age rejected | PASS |
 
 **Result:** 8/8 tests passed, 0 failures.
+
+Date executed: 23 November 2026
 
 All test data was removed using transaction rollback.
 
