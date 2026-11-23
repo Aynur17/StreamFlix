@@ -26,6 +26,11 @@ header {
     font-size: 26px;
 }
 
+header a {
+    text-decoration: none;
+    color: inherit;
+}
+
 nav {
     display: flex;
     gap: 30px;

@@ -47,8 +47,10 @@ function displayProfiles() {
         profileElement.appendChild(profileName);
         profileElement.appendChild(ageCategory);
 
-        profileElement.addEventListener("click", function (event) {
-            alert("You selected" + profile.name);
+        profileElement.addEventListener("click", function () {
+            sessionStorage.setItem("selectedProfile", JSON.stringify(profile));
+
+            window.location.href = "index.html";
         });
 
         profilesContainer.appendChild(profileElement);
