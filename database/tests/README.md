@@ -30,7 +30,8 @@ tests/
 ├── README.md
 └── schema/
     ├── accounts_test.sql
-    └── age_categories_test.sql
+    ├── age_categories_test.sql
+    └── profiles_test.sql
 ```
 
 ### Directory responsibilities
@@ -163,6 +164,37 @@ Date executed: 23 November 2026
 
 All test data was removed using transaction rollback.
 
+---
+
+### Profiles table
+
+**Test file:** `schema/profiles_test.sql`
+
+The Profiles table stores individual user profiles associated with an account. Each profile is linked to an account and an age category. Profile images are optional.
+
+Profile names must be unique within the same account, regardless of capitalization. However, different accounts are allowed to use the same profile name.
+
+#### Test cases
+
+| Test ID | Description | Expected result | Status |
+|---|---|---|---|
+| PRO-01 | Valid profile creation | Profile created successfully | PASS |
+| PRO-02 | Automatic profile ID generation | Profile ID generated automatically | PASS |
+| PRO-03 | Optional profile image | Profile without image accepted | PASS |
+| PRO-04 | Nonexistent account ID | Invalid account reference rejected | PASS |
+| PRO-05 | Nonexistent age category ID | Invalid age category reference rejected | PASS |
+| PRO-06 | Duplicate profile name within the same account | Duplicate name rejected | PASS |
+| PRO-07 | Case-insensitive duplicate profile name | Name differing only by capitalization rejected | PASS |
+| PRO-08 | Same profile name for different accounts | Duplicate name allowed for another account | PASS |
+| PRO-09 | NULL profile name | NULL profile name rejected | PASS |
+| PRO-10 | NULL account ID | NULL account ID rejected | PASS |
+| PRO-11 | NULL age category ID | NULL age category ID rejected | PASS |
+
+**Result:** 11/11 tests passed, 0 failures.
+
+Date executed: 23 November 2026
+
+All test data was removed using transaction rollback.
 ---
 
 ## 6. Test safety
