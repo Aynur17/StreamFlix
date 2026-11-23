@@ -121,6 +121,25 @@ Test file: `schema/accounts_test.sql`
 
 Date executed: 23 November 2026
 
+### Age Categories Table
+
+**Test file:** `schema/age_categories_test.sql`
+
+| Test ID | Description | Result |
+|---|---|---|
+| AGE-01 | Age category creation and ID generation | PASS |
+| AGE-02 | Multiple categories with distinct IDs | PASS |
+| AGE-03 | Reject duplicate category names | PASS |
+| AGE-04 | Reject NULL category name | PASS |
+| AGE-05 | Reject NULL minimum age | PASS |
+| AGE-06 | Reject negative minimum age | PASS |
+| AGE-07 | Accept minimum age of zero | PASS |
+| AGE-08 | Accept valid positive minimum age | PASS |
+
+**Result:** 8/8 tests passed, 0 failures.
+
+All test data was removed using transaction rollback.
+
 ---
 
 ## 6. Test safety
