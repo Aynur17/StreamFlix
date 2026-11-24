@@ -28,10 +28,15 @@ Tests use temporary data whenever possible. Transactions and rollback operations
 ```text
 tests/
 ├── README.md
-└── schema/
-    ├── accounts_test.sql
-    ├── age_categories_test.sql
-    └── profiles_test.sql
+├── schema/
+│   ├── accounts_test.sql
+│   ├── age_categories_test.sql
+│   ├── profiles_test.sql
+│   ├── titles_test.sql
+│   ├── films_test.sql
+│   ├── series_test.sql
+│   ├── seasons_test.sql
+│   └── episodes_test.sql
 ```
 
 ### Directory responsibilities
@@ -70,6 +75,10 @@ The following conventions are used when creating database tests:
 | `AGE` | Age Categories |
 | `PRO` | Profiles |
 | `TIT` | Titles |
+| `FIL` | Films |
+| `SER` | Series |
+| `SEA` | Seasons |
+| `EPI` | Episodes |
 | `GEN` | Genres |
 | `SUB` | Subscriptions |
 
@@ -107,6 +116,8 @@ Expected database errors are handled explicitly within individual test blocks. I
 ---
 
 ## 5. Test results
+
+The following sections document the tests that have been executed and verified successfully.
 
 ### Accounts table
 
@@ -195,6 +206,179 @@ Profile names must be unique within the same account, regardless of capitalizati
 Date executed: 23 November 2026
 
 All test data was removed using transaction rollback.
+
+---
+
+### Titles table
+
+**Test file:** `schema/titles_test.sql`
+
+The Titles table acts as the central entity for all content available in StreamFlix. It stores general information shared by films and series, including the title name, description, release date, title type, and age category.
+
+The `title_type` column determines whether a title is classified as a `FILM` or a `SERIES`. Each title must also be associated with an existing age category.
+
+#### Test cases
+
+| Test ID | Description | Expected result | Status |
+|---|---|---|---|
+| TIT-01 | Valid film title | Film title inserted successfully | PASS |
+| TIT-02 | Valid series title | Series title inserted successfully | PASS |
+| TIT-03 | Automatic title ID generation | Title ID generated automatically | PASS |
+| TIT-04 | NULL description | Title without description accepted | PASS |
+| TIT-05 | NULL release date | Title without release date accepted | PASS |
+| TIT-06 | NULL title name | NULL title name rejected | PASS |
+| TIT-07 | NULL title type | NULL title type rejected | PASS |
+| TIT-08 | Invalid title type | Unsupported title type rejected | PASS |
+| TIT-09 | NULL age category | NULL age category rejected | PASS |
+| TIT-10 | Nonexistent age category ID | Invalid age category reference rejected | PASS |
+
+**Result:** 10/10 tests passed, 0 failures.
+
+Date executed: 24 November 2026
+
+All test data was removed using transaction rollback.
+
+---
+
+### Films table
+
+**Test file:** `schema/films_test.sql`
+
+The Films table stores film-specific information. Each film is connected to an existing record in the Titles table and stores its duration in seconds.
+
+Film durations must be greater than zero. The `title_id` also acts as the primary key, ensuring that the same title cannot be registered more than once in the Films table.
+
+#### Test cases
+
+| Test ID | Description | Expected result | Status |
+|---|---|---|---|
+| FIL-01 | Valid film creation | Film created successfully | PASS |
+| FIL-02 | Positive duration | Film with valid duration accepted | PASS |
+| FIL-03 | Zero duration | Duration of zero rejected | PASS |
+| FIL-04 | Negative duration | Negative duration rejected | PASS |
+| FIL-05 | Nonexistent title ID | Invalid title reference rejected | PASS |
+| FIL-06 | Duplicate title ID | Duplicate film rejected | PASS |
+| FIL-07 | NULL title ID | NULL title ID rejected | PASS |
+| FIL-08 | NULL duration | NULL duration rejected | PASS |
+
+**Result:** 8/8 tests passed, 0 failures.
+
+Date executed: 24 November 2026
+
+All test data was removed using transaction rollback.
+
+---
+
+### Series table
+
+**Test file:** `schema/series_test.sql`
+
+The Series table stores the series-specific classification of content. Each series is linked to an existing record in the Titles table, with the `title_id` serving as both the primary key and a foreign key.
+
+This ensures that a series record cannot exist without a corresponding title record.
+
+#### Test cases
+
+| Test ID | Description | Expected result | Status |
+|---|---|---|---|
+| SER-01 | Valid series creation | Series created successfully | PASS |
+| SER-02 | Nonexistent title ID | Invalid title reference rejected | PASS |
+| SER-03 | Duplicate title ID | Duplicate series rejected | PASS |
+| SER-04 | NULL title ID | NULL title ID rejected | PASS |
+
+**Result:** 4/4 tests passed, 0 failures.
+
+Date executed: 24 November 2026
+
+All test data was removed using transaction rollback.
+
+---
+
+### Seasons table
+
+**Test file:** `schema/seasons_test.sql`
+
+The Seasons table stores the seasons belonging to a series. Each season is linked to an existing series through the `series_id` foreign key.
+
+Season numbers must be greater than zero. A unique constraint on `(series_id, season_number)` ensures that a series cannot contain duplicate season numbers while allowing different series to have seasons with the same number.
+
+#### Test cases
+
+| Test ID | Description | Expected result | Status |
+|---|---|---|---|
+| SEA-01 | Valid season creation | Season created successfully | PASS |
+| SEA-02 | Automatic season ID generation | Season ID generated automatically | PASS |
+| SEA-03 | Season number zero | Season number of zero rejected | PASS |
+| SEA-04 | Negative season number | Negative season number rejected | PASS |
+| SEA-05 | Nonexistent series ID | Invalid series reference rejected | PASS |
+| SEA-06 | Duplicate season number within the same series | Duplicate season rejected | PASS |
+| SEA-07 | Same season number in different series | Same season number allowed for another series | PASS |
+| SEA-08 | NULL series ID | NULL series ID rejected | PASS |
+| SEA-09 | NULL season number | NULL season number rejected | PASS |
+
+**Result:** 9/9 tests passed, 0 failures.
+
+Date executed: 24 November 2026
+
+All test data was removed using transaction rollback.
+
+---
+
+### Episodes table
+
+**Test file:** `schema/episodes_test.sql`
+
+The Episodes table stores individual episodes belonging to a season. Each episode is connected to an existing season through the `season_id` foreign key.
+
+Episodes have a required episode number, name, and duration. Descriptions are optional. Episode numbers and durations must be greater than zero.
+
+The unique constraint on `(season_id, episode_number)` prevents duplicate episode numbers within the same season while allowing episode numbering to restart in a different season.
+
+#### Test cases
+
+| Test ID | Description | Expected result | Status |
+|---|---|---|---|
+| EPI-01 | Valid episode creation | Episode created successfully | PASS |
+| EPI-02 | Automatic episode ID generation | Episode ID generated automatically | PASS |
+| EPI-03 | Optional episode description | Episode without description accepted | PASS |
+| EPI-04 | Episode number zero | Episode number of zero rejected | PASS |
+| EPI-05 | Negative episode number | Negative episode number rejected | PASS |
+| EPI-06 | Nonexistent season ID | Invalid season reference rejected | PASS |
+| EPI-07 | Duplicate episode number within the same season | Duplicate episode rejected | PASS |
+| EPI-08 | Same episode number in different seasons | Same episode number allowed in another season | PASS |
+| EPI-09 | NULL season ID | NULL season ID rejected | PASS |
+| EPI-10 | NULL episode number | NULL episode number rejected | PASS |
+| EPI-11 | NULL episode name | NULL episode name rejected | PASS |
+| EPI-12 | NULL duration | NULL duration rejected | PASS |
+
+**Result:** 12/12 tests passed, 0 failures.
+
+Date executed: 24 November 2026
+
+All test data was removed using transaction rollback.
+
+---
+
+### Overall test results
+
+The following tables have been tested so far:
+
+| Table | Tests performed | Passed | Failed |
+|---|---:|---:|---:|
+| Accounts | 8 | 8 | 0 |
+| Age Categories | 8 | 8 | 0 |
+| Profiles | 11 | 11 | 0 |
+| Titles | 10 | 10 | 0 |
+| Films | 8 | 8 | 0 |
+| Series | 4 | 4 | 0 |
+| Seasons | 9 | 9 | 0 |
+| Episodes | 12 | 12 | 0 |
+| **Total** | **70** | **70** | **0** |
+
+**Overall result: 70/70 tests passed.**
+
+All currently completed schema tests have passed. Testing will continue as additional database components are implemented.
+
 ---
 
 ## 6. Test safety
